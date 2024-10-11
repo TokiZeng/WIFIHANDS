@@ -1,4 +1,0 @@
-BSSID: A8:63:7D:68:45:81, Channel: 5, ESSID: 6N3F
-BSSID: 40:EE:15:B3:C6:60, Channel: 1, ESSID: AUTOGLOBAL
-BSSID: 40:EE:15:78:2D:27, Channel: 1, ESSID: yoyah
-BSSID: FA:8F:CA:6E:1F:19, Channel: 1, ESSID: (empty)
