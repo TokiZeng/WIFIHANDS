@@ -2,7 +2,7 @@
 
 # 設定參數
 INTERFACE="wlan0mon"  # 確認是否正確
-SCAN_DURATION=10      # 減少掃描時間以便更快測試
+SCAN_DURATION=60      # 減少掃描時間以便更快測試
 CSV_FILE="scan_results-01.csv"  # airodump-ng 生成的 CSV 文件
 
 echo "正在掃描 Wi-Fi 網絡，時間：$SCAN_DURATION 秒..."
